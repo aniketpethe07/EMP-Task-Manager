@@ -1,12 +1,32 @@
 import { React, useState } from "react";
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
-const Login = ({ handleLogin }) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const submitHandler = (e) => {
+
+  const submitHandler = async(e) => {
     e.preventDefault();
-    console.log(email+password);
+    // console.log(email+password);
+    try {
+      const response = await axios.post("/api/login", {
+        email,
+        password,
+      });
+      localStorage.clear()
+      if (response.status === 201 && response.data.user=='admin') {
+        navigate('/admin')
+        localStorage.setItem('user',response.data.user)
+      } else if(response.status === 201 && response.data.user=='employee'){
+        navigate('/employee')
+        localStorage.setItem('user',response.data.user)
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
   };
 
   return (
