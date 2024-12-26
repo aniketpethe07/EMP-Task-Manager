@@ -1,15 +1,23 @@
+const User = require("../models/userModel");
+
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    console.log(email);
-    if(email=="admin@gmail.com"&&password=="123"){
-      res.status(201).json({user: "admin"});
-    }else if(email=="emp@gmail.com"&&password=="123"){
-      res.status(201).json({user: "employee"});
-    }else{
-      res.status(400).json({message: 'Invalid credentials'});
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    
+    if (user.password != password) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    res.status(201).json({
+      message: "Logged in successfully",
+      user: {
+        email: user.email,
+        name: user.name, 
+        role: user.role
+      },
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

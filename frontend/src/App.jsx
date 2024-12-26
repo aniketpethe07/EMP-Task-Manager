@@ -1,15 +1,15 @@
-import React from 'react'
-import Login from './components/Auth/Login'
-import AdminDashboard from './components/Dashboard/AdminDashboard'
-import EmployeeDashboard from './components/Dashboard/EmployeeDashboard'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
   return (
     <>
-      <Outlet/>
+      <AuthProvider>
+        <Outlet />
+      </AuthProvider>
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

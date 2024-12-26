@@ -1,33 +1,36 @@
-import { React, useState } from "react";
+import { React, useContext, useState } from "react";
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setLoggedIn } = useContext(AuthContext)
 
-
-  const submitHandler = async(e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    // console.log(email+password);
     try {
       const response = await axios.post("/api/login", {
         email,
         password,
       });
-      localStorage.clear()
-      if (response.status === 201 && response.data.user=='admin') {
-        navigate('/admin')
-        localStorage.setItem('user',response.data.user)
-      } else if(response.status === 201 && response.data.user=='employee'){
-        navigate('/employee')
-        localStorage.setItem('user',response.data.user)
+  
+      if (response.status === 201) {
+        const { name, role } = response.data.user;
+        localStorage.setItem("loggedIn", JSON.stringify(true));
+        localStorage.setItem("name", name);
+        localStorage.setItem("role", role);
+        setLoggedIn(true);
+  
+        navigate(role === "ADMIN" ? "/admin" : "/employee");
       }
     } catch (error) {
       console.error("Error during login:", error);
     }
   };
+  
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
@@ -44,6 +47,9 @@ const Login = () => {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
+            }}
+            style={{
+              WebkitTextFillColor: "inherit", // Prevent autofill text from overriding color
             }}
             required
           />
