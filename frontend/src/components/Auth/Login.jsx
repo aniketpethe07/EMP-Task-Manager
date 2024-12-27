@@ -12,14 +12,15 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/login", {
+      const response = await axios.post("/api/users/login", {
         email,
         password,
       });
   
       if (response.status === 201) {
-        const { name, role } = response.data.user;
+        const { _id, name, role } = response.data.user;
         localStorage.setItem("loggedIn", JSON.stringify(true));
+        localStorage.setItem("_id", _id);
         localStorage.setItem("name", name);
         localStorage.setItem("role", role);
         setLoggedIn(true);
@@ -47,9 +48,6 @@ const Login = () => {
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
-            }}
-            style={{
-              WebkitTextFillColor: "inherit", // Prevent autofill text from overriding color
             }}
             required
           />

@@ -13,6 +13,7 @@ const loginUser = async (req, res) => {
     res.status(201).json({
       message: "Logged in successfully",
       user: {
+        _id: user._id,
         email: user.email,
         name: user.name, 
         role: user.role
@@ -23,4 +24,19 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser };
+const allEmployees = async (req, res) => {
+  try {
+    const user = await User.find({ role: 'EMPLOYEE' });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(201).json({
+      message: "Logged in successfully",
+      user: user.map(u => ({ _id:u._id, name: u.name, role: u.role })) 
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = { loginUser, allEmployees };
