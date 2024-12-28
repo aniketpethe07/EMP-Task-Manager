@@ -17,10 +17,10 @@ const Login = () => {
         password,
       });
   
-      if (response.status === 201) {
-        const { _id, name, role } = response.data.user;
+      if (response.status === 201) {        
+        const { id, name, role } = response.data;
         localStorage.setItem("loggedIn", JSON.stringify(true));
-        localStorage.setItem("_id", _id);
+        localStorage.setItem("_id", id);
         localStorage.setItem("name", name);
         localStorage.setItem("role", role);
         setLoggedIn(true);

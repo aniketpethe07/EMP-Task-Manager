@@ -1,12 +1,17 @@
-const Task = require("../models/taskModel");
+const connectDB = require("../db/index")
 
 const createTask = async (req, res) => {
-  const task = req.body;
+  const { title, date, category, description, assignedTo, assignedBy } = req.body;
   try {
-    const newTask = await Task.create(task);
+    const con = await connectDB();
+    const [result] = await con.query(
+      'INSERT INTO tasks (title, date, category, description, status, assignedTo, assignedBy) VALUES (?, ?, ?, ?, ?, ?, ?)',[title, date, category, description, "Pending",assignedTo, assignedBy]
+    );
     res.status(201).json({
       message: "Task created successfully",
+      result
     });
+    await con.end();
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -14,13 +19,14 @@ const createTask = async (req, res) => {
 
 const allTask = async (req, res) => {
   try {
-    const tasks = await Task.find().populate('assignedTo', 'name');
+    const con = await connectDB();
+    const [tasks] = await con.query('SELECT t.id, t.title, t.status, u.name as assignedTo  FROM tasks t LEFT JOIN users u ON t.assignedTo = u.id');
     res.status(201).json({
       tasks: tasks.map(t => ({
-        _id: t._id,
+        id: t.id,
         title: t.title,
         status: t.status,
-        assignedTo: t.assignedTo ? { name: t.assignedTo.name } : null
+        assignedTo: t.assignedTo
       }))
     });
   } catch (error) {
@@ -31,7 +37,9 @@ const allTask = async (req, res) => {
 const taskCount = async (req, res) => {
   const { id }= req.params
   try {
-    const tasks = await Task.find({assignedTo: id})
+    const con = await connectDB();
+    const [tasks] = await con.query('SELECT * FROM tasks WHERE assignedTo = ?',[id]);
+    // const tasks = await Task.find({assignedTo: id})
     res.status(201).json({
       tasks
     });

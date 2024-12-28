@@ -1,38 +1,35 @@
-const User = require("../models/userModel");
+const connectDB = require("../db/index")
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email);
+  
   try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const con = await connectDB(); 
+    const [result] = await con.query('SELECT * FROM users WHERE email = ? AND password = ?', [email,password]);
+    
+    if (result.length > 0) {
+      res.status(201).json({id:result[0].id, name:result[0].name, role:result[0].role});
+    } else {
+      res.status(404).json({ msg: "User not found" });
     }
-    if (user.password != password) {
-      return res.status(401).json({ message: "Invalid email or password" });
-    }
-    res.status(201).json({
-      message: "Logged in successfully",
-      user: {
-        _id: user._id,
-        email: user.email,
-        name: user.name, 
-        role: user.role
-      },
-    });
+    con.end()
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+
 const allEmployees = async (req, res) => {
   try {
-    const user = await User.find({ role: 'EMPLOYEE' });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    const con = await connectDB(); 
+    const [users] = await con.query('SELECT * FROM users WHERE role = "EMPLOYEE"');
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No employees found" });
     }
-    res.status(201).json({
-      message: "Logged in successfully",
-      user: user.map(u => ({ _id:u._id, name: u.name, role: u.role })) 
+    
+    res.status(200).json({
+      users: users.map(u => ({ id: u.id, name: u.name, role: u.role })),
     });
   } catch (error) {
     res.status(400).json({ error: error.message });

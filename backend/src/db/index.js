@@ -1,18 +1,20 @@
-const mongoose = require("mongoose");
-const DB_NAME = require("../../constants");
+const mysql2 = require('mysql2/promise');
+const DB_NAME = require('../../constants')
 
 const connectDB = async () => {
   try {
-    const connectionInstance = await mongoose.connect(
-      `${process.env.MONGODB_URI}/${DB_NAME}`
-    );
-    console.log(
-      `\nMongoDB connected!! DB NAME: ${connectionInstance.connection.name}`
-    );
-
+    const con = await mysql2.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'peace',
+      database: DB_NAME,
+    });
+    
+    console.log(`MySQL Connected! DB NAME: ${DB_NAME}`);
+    return con; 
   } catch (error) {
-    console.log("MONGODB connection failed: ", error);
-    process.exit(1);
+    console.error('Error connecting to MySQL:', error);
+    throw error; 
   }
 };
 

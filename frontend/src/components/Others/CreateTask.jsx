@@ -1,3 +1,4 @@
+
 import { React, useEffect, useState } from "react";
 import axios from "axios";
 import Toast from "./Toast";
@@ -26,7 +27,8 @@ const CreateTask = () => {
       const fetchUsers = async () => {
         try {
           const response = await axios.get("/api/users/employees");
-          setUsers(response.data.user);
+          // console.log(response.data.users);
+          setUsers(response.data.users);
         } catch (error) {
           setToast({ message: "Error fetching users", type: "error" });
           console.error("Error fetching users:", error);
@@ -123,8 +125,8 @@ const CreateTask = () => {
               </option>
               {users.map((user) => (
                 <option
-                  key={user._id}
-                  value={user._id}
+                  key={user.id}
+                  value={user.id}
                   className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
                 >
                   {user.name}
