@@ -1,4 +1,3 @@
-
 import { React, useEffect, useState } from "react";
 import axios from "axios";
 import Toast from "./Toast";
@@ -10,6 +9,7 @@ const CreateTask = () => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [category, setCategory] = useState("");
+  const [priority, setPriority] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
   const [assignedBy, setAssignedBy] = useState("");
 
@@ -38,8 +38,12 @@ const CreateTask = () => {
     }
   }, [assignedBy]);
 
-  const handleChange = (e) => {
+  const handleAssignToChange = (e) => {
     setAssignedTo(e.target.value);
+  };
+
+  const handlePriorityChange = (e) => {
+    setPriority(e.target.value);
   };
 
   const handleCreatedTask = async (e) => {
@@ -57,6 +61,7 @@ const CreateTask = () => {
       description,
       assignedTo,
       assignedBy,
+      priority
     };
 
     try {
@@ -117,7 +122,7 @@ const CreateTask = () => {
             <h3 className="text-sm text-gray-300 mb-0.5">Assign to</h3>
             <select
               className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
-              onChange={handleChange}
+              onChange={handleAssignToChange}
               value={assignedTo}
             >
               <option disabled value="">
@@ -148,15 +153,44 @@ const CreateTask = () => {
         </div>
 
         <div className="w-2/5 flex flex-col items-start">
-          <h3 className="text-sm text-gray-300 mb-0.5">Description</h3>
-          <textarea
-            className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <button className="bg-emerald-500 py-3 hover:bg-emerald-600 px-5 rounded text-sm mt-4 w-full">
-            Create Task
-          </button>
+            <h3 className="text-sm text-gray-300 mb-0.5">Priority</h3>
+            <select
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              onChange={handlePriorityChange}
+              value={priority}
+            >
+              <option disabled value="">
+                Select Priority
+              </option>
+              <option
+                  value={"High"}
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                >
+                  High
+              </option>
+              <option
+                  value={"Medium"}
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                >
+                  Medium
+              </option>
+              <option
+                  value={"Low"}
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                >
+                  Low
+              </option>
+              
+            </select>
+            <h3 className="text-sm text-gray-300 mb-0.5">Description</h3>
+            <textarea
+              className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button className="bg-emerald-500 py-3 hover:bg-emerald-600 px-5 rounded text-sm mt-4 w-full">
+              Create Task
+            </button>
         </div>
       </form>
     </div>

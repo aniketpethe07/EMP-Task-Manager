@@ -15,7 +15,7 @@ const AdminDashboard = () => {
   return (
     <div className="p-6 w-full bg-zinc-900 h-screen">
       <Header />
-      {isChecked ? <AllTask /> : <CreateTask /> }
+      {isChecked!==true ? <CreateTask /> : <AllTask /> }
       <footer className="fixed bottom-0 left-0 w-full bg-zinc-800 py-2 flex justify-center items-center">
         <Toggle isChecked={isChecked} handleChange={handleChange} />
       </footer>

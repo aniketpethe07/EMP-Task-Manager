@@ -4,6 +4,14 @@ import axios from "axios";
 const TaskList = () => {
   const [tasks, setTasks] = useState([]);
 
+
+  const colorArray = {
+    "Pending": "bg-yellow-400", // Pending tasks
+    "In-Progress": "bg-blue-400", // In Progress tasks
+    "Completed": "bg-green-400", // Completed tasks
+    "Failed": "bg-red-400 line-through", // Overdue tasks
+  };
+
   useEffect(() => {
     const id = localStorage.getItem("_id");
     const fetchData = async () => {
@@ -26,7 +34,7 @@ const TaskList = () => {
       {tasks.map((task) => (
         <div
           key={task._id}
-          className={`flex-shrink-0 h-full w-[400px] p-5 bg-green-400 rounded-xl`}
+          className={`flex-shrink-0 h-full w-[400px] p-5 ${colorArray[task.status]} rounded-xl`}
         >
           <div className="flex justify-between items-center text-sm">
             {/* <h3 className="bg-red-600 p-3 rounded-xl">Priority</h3> */}
@@ -37,6 +45,9 @@ const TaskList = () => {
           <div className="">
             <h3 className="text-lg">
               Status: {task.status}
+            </h3>
+            <h3 className="text-lg">
+              Priority: {task.priority}
             </h3>
           </div>
         </div>
