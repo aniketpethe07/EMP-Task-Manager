@@ -7,7 +7,7 @@ const CreateTask = () => {
   const [users, setUsers] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [assignedDate, setAssignedDate] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
@@ -49,14 +49,9 @@ const CreateTask = () => {
   const handleCreatedTask = async (e) => {
     e.preventDefault();
 
-    if (!title || !date || !category || !assignedTo) {
-      setToast({ message: "All fields are required", type: "error" });
-      return;
-    }
-
     const taskData = {
       title,
-      date,
+      assignedDate,
       category,
       description,
       assignedTo,
@@ -70,7 +65,7 @@ const CreateTask = () => {
         setToast({ message: "Task Created Successfully", type: "success" });
         // Clear input fields
         setTitle("");
-        setDate("");
+        setAssignedDate("");
         setCategory("");
         setDescription("");
         setAssignedTo("");
@@ -102,7 +97,7 @@ const CreateTask = () => {
           <div>
             <h3 className="text-sm text-gray-300 mb-0.5">Task Title</h3>
             <input
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-400"
               type="text"
               placeholder="Make a UI design"
               value={title}
@@ -110,18 +105,19 @@ const CreateTask = () => {
             />
           </div>
           <div>
-            <h3 className="text-sm text-gray-300 mb-0.5">Date</h3>
+            <h3 className="text-sm text-gray-300 mb-0.5">Assign a date</h3>
             <input
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-400"
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={assignedDate}
+              onChange={(e) => setAssignedDate(e.target.value)}
+              min={new Date().toISOString().split("T")[0]} 
             />
           </div>
           <div>
             <h3 className="text-sm text-gray-300 mb-0.5">Assign to</h3>
             <select
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-400"
               onChange={handleAssignToChange}
               value={assignedTo}
             >
@@ -132,7 +128,7 @@ const CreateTask = () => {
                 <option
                   key={user.id}
                   value={user.id}
-                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800 text-gray-400"
                 >
                   {user.name}
                 </option>
@@ -143,7 +139,7 @@ const CreateTask = () => {
           <div>
             <h3 className="text-sm text-gray-300 mb-0.5">Category</h3>
             <input
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-400"
               type="text"
               placeholder="Design, Dev, etc."
               value={category}
@@ -155,7 +151,7 @@ const CreateTask = () => {
         <div className="w-2/5 flex flex-col items-start">
             <h3 className="text-sm text-gray-300 mb-0.5">Priority</h3>
             <select
-              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4"
+              className="text-sm py-1 px-2 w-4/5 rounded outline-none bg-transparent border-[1px] border-gray-400 mb-4 text-gray-400"
               onChange={handlePriorityChange}
               value={priority}
             >
@@ -164,19 +160,19 @@ const CreateTask = () => {
               </option>
               <option
                   value={"High"}
-                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800 text-gray-400"
                 >
                   High
               </option>
               <option
                   value={"Medium"}
-                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800 text-gray-400"
                 >
                   Medium
               </option>
               <option
                   value={"Low"}
-                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800"
+                  className="text-sm py-1 px-2 w-4/5 bg-zinc-800 text-gray-400"
                 >
                   Low
               </option>
@@ -184,7 +180,7 @@ const CreateTask = () => {
             </select>
             <h3 className="text-sm text-gray-300 mb-0.5">Description</h3>
             <textarea
-              className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400"
+              className="w-full h-44 text-sm py-2 px-4 rounded outline-none bg-transparent border-[1px] border-gray-400 text-gray-400"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />

@@ -1,5 +1,5 @@
 const express = require('express')
-const { createTask, allTask, taskCount } = require('../controllers/taskController')
+const { createTask, allTask, taskCount, taskStatus } = require('../controllers/taskController')
 const router = express.Router()
 
 router.route('/createTask')
@@ -10,5 +10,8 @@ router.route('/allTask')
 
 router.route('/taskCount/:id')
 .get(taskCount)
+
+router.route('/taskStatus/:id')
+.post(taskStatus)
 
 module.exports = router

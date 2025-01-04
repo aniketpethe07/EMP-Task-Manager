@@ -5,7 +5,7 @@ import AllTask from "../Others/AllTask";
 import Toggle from "../Others/Toggle";
 
 const AdminDashboard = () => {
-  const [isChecked, setIsChecked] = useState(false); // State to manage toggle
+  const [isChecked, setIsChecked] = useState(true); // State to manage toggle
 
   // Handler to update the state when checkbox is toggled
   const handleChange = (e) => {

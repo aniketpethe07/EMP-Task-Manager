@@ -11,7 +11,7 @@ const Header = () => {
     
   }
   return (
-    <div className="flex items-end justify-between">
+    <div className="flex items-end justify-between text-white">
       <h1 className="text-2xl">
         Hello <br />
         {name.charAt(0).toUpperCase() + name.slice(1)}
