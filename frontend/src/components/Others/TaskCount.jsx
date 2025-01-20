@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 const TaskCount = ({ updateTaskType }) => {
+  const [allTasks, setAllTasks] = useState();
   const [pendingTasks, setPendingTasks] = useState();
   const [acceptedTasks, setAcceptedTasks] = useState();
   const [completedTasks, setCompletedTasks] = useState();
@@ -14,6 +15,7 @@ const TaskCount = ({ updateTaskType }) => {
         const response = await axios.get(`/api/tasks/taskCount/${id}`);
         const tasks = response.data.tasks;
 
+        setAllTasks(tasks.filter((task) => task).length);
         setPendingTasks(tasks.filter((task) => task.status === "Pending").length);
         setAcceptedTasks(tasks.filter((task) => task.status === "In-Progress").length);
         setCompletedTasks(tasks.filter((task) => task.status === "Completed").length);
@@ -44,7 +46,7 @@ const TaskCount = ({ updateTaskType }) => {
   };
 
   return (
-    <div className="flex justify-between mt-10 gap-5 screen">
+    <div className="flex m-10 gap-5 screen">
       <div
         className="h-40 w-[45%] p-10 bg-blue-400 rounded-xl cursor-pointer"
         onClick={() => handleClick("Pending")}
@@ -72,6 +74,13 @@ const TaskCount = ({ updateTaskType }) => {
       >
         <h2 className="text-3xl font-semibold mb-3">{failedTasks}</h2>
         <h3 className="text-xl font-medium">Failed Task</h3>
+      </div>
+      <div
+        className="h-40 w-[45%] p-10 bg-purple-400 rounded-xl cursor-pointer"
+        onClick={() => handleClick("all")}
+      >
+        <h2 className="text-3xl font-semibold mb-3">{allTasks}</h2>
+        <h3 className="text-xl font-medium">All Task</h3>
       </div>
     </div>
   );
